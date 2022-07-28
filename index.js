@@ -1,9 +1,9 @@
-// write to js file
-const fs = require('fs')
-const path = require('path');
-const { marked } = require('marked');
+// Imports.
+import fs from 'fs';
+import path from 'path';
+import { marked } from 'marked';
 
-let directoryPath = path.join(__dirname, '/posts')
+// Intial boilerplate
 let content = `
 const express = require('express')
 const app = express()
@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
 })
 
 `
+
+// Write the initial boilerplate
 fs.writeFile('./express.js', content, err => {
   if (err) {
     console.error(err)
@@ -21,9 +23,50 @@ fs.writeFile('./express.js', content, err => {
   }
 })
 
+// Create routes boilerplate function
+function createRoutes(nfile){
+  let acontent = `
+  app.get('/${nfile}', (req, res) => {
+    res.sendFile('./app/${nfile}.html', { root: __dirname })
+  })
+        `
+  fs.appendFile('./express.js', acontent, err => {
+    if (err) {
+      console.error(err)
+        return
+      }
+  })
+}
+
+function writeStartContent(nfile, startContent){
+  fs.writeFile(`./app/${nfile}.html`, startContent, err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  })
+}
+
+function addTranspiledHtml(nfile, nhtml){
+  fs.appendFile(`./app/${nfile}.html`, nhtml, err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  })
+}
+
+function addEndContent(nfile, endContent){
+  fs.appendFile(`./app/${nfile}.html`, endContent, err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  })
+}
 
 console.log('Buiding...')
-fs.readdir(directoryPath, function (err, files) {
+fs.readdir("./posts", function (err, files) {
     //handling error
     if (err) {
         return console.log('Unable to scan directory: ' + err);
@@ -46,56 +89,28 @@ fs.readdir(directoryPath, function (err, files) {
   </body>
 </html>
       `
-      let acontent = `
-app.get('/${nfile}', (req, res) => {
-  res.sendFile('./app/${nfile}.html', { root: __dirname })
-})
-      `
-      fs.appendFile('./express.js', acontent, err => {
-        if (err) {
-          console.error(err)
-          return
-        }
-      })
+      createRoutes(nfile)
       fs.readFile(`./posts/${file}`, 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
         }
         const nhtml = marked.parse(data);
-        fs.writeFile(`./app/${nfile}.html`, startContent, err => {
-          if (err) {
-            console.error(err)
-            return
-          }
-        })
-        fs.appendFile(`./app/${nfile}.html`, nhtml, err => {
-            if (err) {
-              console.error(err)
-              return
-            }
-        })
-        fs.appendFile(`./app/${nfile}.html`, endContent, err => {
-            if (err) {
-              console.error(err)
-              return
-            }
-        })
+        writeStartContent(nfile, startContent)
+        addTranspiledHtml(nfile, nhtml)
+        addEndContent(nfile, endContent)
         }
       );
-
-
-
-
     });
 });
-content = `
+
+let finalcontent = `
 app.listen(port, () => {
   console.log("Example app listening on port " + port);
 })
 `
 
-fs.appendFile('./express.js', content, err => {
+fs.appendFile('./express.js', finalcontent, err => {
   if (err) {
     console.error(err)
     return
