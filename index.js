@@ -106,4 +106,4 @@ fs.appendFile('./express.js', content, err => {
 
 
 console.log('Done! You can now run the the app by running')
-console.log('')
+console.log('\n   node express.js')
