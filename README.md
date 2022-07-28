@@ -1,2 +1,3 @@
-# seasann-template
-seasann-template
+# Seasann template
+
+Template for seasann
