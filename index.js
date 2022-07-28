@@ -4,7 +4,7 @@ const path = require('path');
 const { marked } = require('marked');
 
 let directoryPath = path.join(__dirname, '/posts')
-const content = `
+let content = `
 const express = require('express')
 const app = express()
 const port = 3000
@@ -29,8 +29,23 @@ fs.readdir(directoryPath, function (err, files) {
         return console.log('Unable to scan directory: ' + err);
     } 
     //listing all files using forEach
-    files.forEach(function (file) {      
+    files.forEach(function (file) {     
       let nfile = path.parse(file).name;
+      let startContent = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${nfile}</title>
+  </head>
+  <body>
+`
+      let endContent = `
+  </body>
+</html>
+      `
       let acontent = `
 app.get('/${nfile}', (req, res) => {
   res.sendFile('./app/${nfile}.html', { root: __dirname })
@@ -48,15 +63,26 @@ app.get('/${nfile}', (req, res) => {
           return;
         }
         const nhtml = marked.parse(data);
-        if (!fs.existsSync('foo.txt')) {
-          fs.writeFile(`./app/${nfile}.html`, nhtml, err => {
+        fs.writeFile(`./app/${nfile}.html`, startContent, err => {
+          if (err) {
+            console.error(err)
+            return
+          }
+        })
+        fs.appendFile(`./app/${nfile}.html`, nhtml, err => {
             if (err) {
               console.error(err)
               return
             }
-          })
+        })
+        fs.appendFile(`./app/${nfile}.html`, endContent, err => {
+            if (err) {
+              console.error(err)
+              return
+            }
+        })
         }
-      });
+      );
 
 
 
@@ -69,7 +95,7 @@ app.listen(port, () => {
 })
 `
 
-fs.appendFile('./express.js', acontent, err => {
+fs.appendFile('./express.js', content, err => {
   if (err) {
     console.error(err)
     return
