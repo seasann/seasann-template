@@ -65,6 +65,59 @@ function addEndContent(nfile, endContent){
   })
 }
 
+function openCssF(openCss, nfile){
+  fs.appendFile(`./app/${nfile}.html`, openCss, err => {
+    if (err){
+      console.log(err)
+      return
+    }
+  })
+}
+
+function endCssF(endCss, nfile){
+  fs.appendFile(`./app/${nfile}.html`, endCss, err => {
+    if (err){
+      console.log(err)
+      return
+    }
+  })  
+}
+
+
+function addCss(nfile, openCSS, endCss){
+  fs.readdir("./style", function (err, files) {
+    files.forEach(function (file){
+      let cfile = path.parse(file).name;
+      if (cfile == nfile){
+        fs.readFile(`./style/${file}`, 'utf8', (err, data) => {
+          if (err) {
+            console.error(err);
+            return;
+          }  
+          fs.appendFile(`./app/${nfile}.html`, openCSS, err => {
+            if (err) {
+              console.log(err)
+              return
+            }
+          })
+          fs.appendFile(`./app/${nfile}.html`, data, err => {
+            if (err) {
+              console.log(err)
+              return
+            }
+          })
+          fs.appendFile(`./app/${nfile}.html`, endCss, err => {
+            if (err) {
+              console.log(err)
+              return
+            }
+          })
+        })
+      }
+    })
+  })  
+}
+
 console.log('Buiding...')
 fs.readdir("./posts", function (err, files) {
     //handling error
@@ -89,6 +142,12 @@ fs.readdir("./posts", function (err, files) {
   </body>
 </html>
       `
+      let openCss = `
+<style>
+      `
+      let endCss = `
+</style>
+`
       createRoutes(nfile)
       fs.readFile(`./posts/${file}`, 'utf8', (err, data) => {
         if (err) {
@@ -97,6 +156,7 @@ fs.readdir("./posts", function (err, files) {
         }
         const nhtml = marked.parse(data);
         writeStartContent(nfile, startContent)
+        addCss(nfile, openCss, endCss)
         addTranspiledHtml(nfile, nhtml)
         addEndContent(nfile, endContent)
         }
