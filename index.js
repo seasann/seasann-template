@@ -13,9 +13,6 @@ app.get('/', (req, res) => {
   res.send("Hello!")
 })
 
-app.listen(port, () => {
-  console.log("Example app listening on port " + port);
-})
 `
 fs.writeFile('./express.js', content, err => {
   if (err) {
@@ -66,6 +63,21 @@ app.get('/${nfile}', (req, res) => {
 
     });
 });
+let content = `
+app.listen(port, () => {
+  console.log("Example app listening on port " + port);
+})
+`
+
+fs.appendFile('./express.js', acontent, err => {
+  if (err) {
+    console.error(err)
+    return
+  }
+})
+
+
+
 
 console.log('Done! You can now run the the app by running')
 console.log('')
