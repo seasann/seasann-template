@@ -63,7 +63,7 @@ app.get('/${nfile}', (req, res) => {
 
     });
 });
-let content = `
+content = `
 app.listen(port, () => {
   console.log("Example app listening on port " + port);
 })
