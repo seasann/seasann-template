@@ -16,7 +16,7 @@ pnpm run dev
 
 ## New Pages
 
-To create new pages, create markdown documents in the posts/ directory.
+To create new pages, create markdown documents in the `posts/` directory.
 
 ## Create Css
 
