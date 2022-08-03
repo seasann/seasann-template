@@ -10,13 +10,28 @@ const app = express()
 const port = 3000
 `
 
-// Write the initial boilerplate
-fs.writeFile('./express.cjs', content, err => {
-  if (err) {
-    console.error(err)
-    return
-  }
-})
+if (args[2] == "--port"){
+  let content = `
+const express = require('express')
+const app = express()
+const port = ${args[3]}
+`
+  // Write the initial boilerplate
+  fs.writeFile('./express.cjs', content, err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  })
+}else{
+  // Write the initial boilerplate
+  fs.writeFile('./express.cjs', content, err => {
+    if (err) {
+      console.error(err)
+      return
+    }
+  })
+}
 
 // Create routes boilerplate function
 function createRoutes(nfile){
