@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 `
 
 // Write the initial boilerplate
-fs.writeFile('./express.js', content, err => {
+fs.writeFile('./express.cjs', content, err => {
   if (err) {
     console.error(err)
     return
