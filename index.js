@@ -8,11 +8,6 @@ let content = `
 const express = require('express')
 const app = express()
 const port = 3000
-
-app.get('/', (req, res) => {
-  res.send("Hello!")
-})
-
 `
 
 // Write the initial boilerplate
@@ -25,10 +20,23 @@ fs.writeFile('./express.cjs', content, err => {
 
 // Create routes boilerplate function
 function createRoutes(nfile){
-  let acontent = `
-  app.get('/${nfile}', (req, res) => {
-    res.sendFile('./app/${nfile}.html', { root: __dirname })
+  if (nfile == "index"){
+    let acontent = `
+app.get('/', (req, res) => {
+  res.sendFile('./app/${nfile}.html', { root: __dirname })
+})
+` 
+  fs.appendFile('./express.cjs', acontent, err => {
+    if (err) {
+      console.error(err)
+        return
+    }
   })
+  }
+  let acontent = `
+app.get('/${nfile}', (req, res) => {
+  res.sendFile('./app/${nfile}.html', { root: __dirname })
+})
         `
   fs.appendFile('./express.cjs', acontent, err => {
     if (err) {
