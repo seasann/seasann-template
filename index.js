@@ -30,7 +30,7 @@ function createRoutes(nfile){
     res.sendFile('./app/${nfile}.html', { root: __dirname })
   })
         `
-  fs.appendFile('./express.js', acontent, err => {
+  fs.appendFile('./express.cjs', acontent, err => {
     if (err) {
       console.error(err)
         return
@@ -170,7 +170,7 @@ app.listen(port, () => {
 })
 `
 
-fs.appendFile('./express.js', finalcontent, err => {
+fs.appendFile('./express.cjs', finalcontent, err => {
   if (err) {
     console.error(err)
     return
@@ -181,4 +181,4 @@ fs.appendFile('./express.js', finalcontent, err => {
 
 
 console.log('Done! You can now run the the app by running')
-console.log('\n   node express.js')
+console.log('\n npm run dev')
