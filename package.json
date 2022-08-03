@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node index.js",
-    "dev": "node index.js && node express.cjs"
+    "dev": "node index.js --silent && node express.cjs"
   },
   "keywords": [],
   "author": "",

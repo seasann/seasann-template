@@ -2,7 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import { marked } from 'marked';
-
+let args = process.argv;
 // Intial boilerplate
 let content = `
 const express = require('express')
@@ -186,7 +186,7 @@ fs.appendFile('./express.cjs', finalcontent, err => {
 })
 
 
-
-
-console.log('Done! You can now run the the app by running')
-console.log('\n npm run dev')
+if (args[2] != "--silent"){
+  console.log('Done! You can now run the the app by running')
+  console.log('\n npm run dev')
+}

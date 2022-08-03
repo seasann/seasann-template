@@ -5,13 +5,13 @@ Template for seasann
 ## Building the page
 
 ```bash
-node index.js
+pnpm run build
 ```
 
 ## Running the page
 
 ```bash
-node express.cjs
+pnpm run dev
 ```
 
 ## New Pages
