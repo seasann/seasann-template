@@ -1,6 +1,6 @@
-# Seasann template
+# Seasann template ts
 
-Template for seasann
+Template for seasann in typescript
 
 ## Building the page
 
