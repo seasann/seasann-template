@@ -1,5 +1,5 @@
 // Imports.
-import { writeFile, readFile, readdir, appendFile } from 'fs';
+import { writeFile, readFile, readdir, appendFile, existsSync } from 'fs';
 import { parse } from 'path';
 import { marked } from 'marked';
 import { detect } from 'detect-package-manager';
@@ -45,7 +45,7 @@ app.get('/', (req: any, res: any) => {
   appendFile('./express.cts', acontent, err => {
     if (err) {
       console.error(err)
-        return
+        return;
     }
   })
   }
@@ -99,7 +99,7 @@ function addCss(nfile: any, openCSS: any, endCss: any){
           if (err) {
             console.error(err);
             return;
-          }  
+          } 
           appendFile(`./app/${nfile}.html`, openCSS, err => {
             if (err) {
               console.log(err)
