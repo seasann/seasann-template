@@ -1,7 +1,8 @@
 // Imports.
-import fs from 'fs';
-import path from 'path';
+import { writeFile, readFile, readdir, appendFile } from 'fs';
+import { parse } from 'path';
 import { marked } from 'marked';
+import { detect } from 'detect-package-manager';
 let args = process.argv;
 // Intial boilerplate
 let content = `
@@ -17,7 +18,7 @@ const app = express()
 const port = ${args[3]}
 `
   // Write the initial boilerplate
-  fs.writeFile('./express.cjs', content, err => {
+  writeFile('./express.cts', content, err => {
     if (err) {
       console.error(err)
       return
@@ -25,7 +26,7 @@ const port = ${args[3]}
   })
 }else{
   // Write the initial boilerplate
-  fs.writeFile('./express.cjs', content, err => {
+  writeFile('./express.cts', content, err => {
     if (err) {
       console.error(err)
       return
@@ -34,14 +35,14 @@ const port = ${args[3]}
 }
 
 // Create routes boilerplate function
-function createRoutes(nfile){
+function createRoutes(nfile: any){
   if (nfile == "index"){
     let acontent = `
-app.get('/', (req, res) => {
+app.get('/', (req: any, res: any) => {
   res.sendFile('./app/${nfile}.html', { root: __dirname })
 })
 ` 
-  fs.appendFile('./express.cjs', acontent, err => {
+  appendFile('./express.cts', acontent, err => {
     if (err) {
       console.error(err)
         return
@@ -49,11 +50,11 @@ app.get('/', (req, res) => {
   })
   }
   let acontent = `
-app.get('/${nfile}', (req, res) => {
+app.get('/${nfile}', (req: any, res: any) => {
   res.sendFile('./app/${nfile}.html', { root: __dirname })
 })
         `
-  fs.appendFile('./express.cjs', acontent, err => {
+  appendFile('./express.cts', acontent, err => {
     if (err) {
       console.error(err)
         return
@@ -61,8 +62,8 @@ app.get('/${nfile}', (req, res) => {
   })
 }
 
-function writeStartContent(nfile, startContent){
-  fs.writeFile(`./app/${nfile}.html`, startContent, err => {
+function writeStartContent(nfile: any, startContent: any){
+  writeFile(`./app/${nfile}.html`, startContent, err => {
     if (err) {
       console.error(err)
       return
@@ -70,8 +71,8 @@ function writeStartContent(nfile, startContent){
   })
 }
 
-function addTranspiledHtml(nfile, nhtml){
-  fs.appendFile(`./app/${nfile}.html`, nhtml, err => {
+function addTranspiledHtml(nfile: any, nhtml: any){
+  appendFile(`./app/${nfile}.html`, nhtml, err => {
     if (err) {
       console.error(err)
       return
@@ -79,8 +80,8 @@ function addTranspiledHtml(nfile, nhtml){
   })
 }
 
-function addEndContent(nfile, endContent){
-  fs.appendFile(`./app/${nfile}.html`, endContent, err => {
+function addEndContent(nfile: any, endContent: any){
+  appendFile(`./app/${nfile}.html`, endContent, err => {
     if (err) {
       console.error(err)
       return
@@ -88,48 +89,30 @@ function addEndContent(nfile, endContent){
   })
 }
 
-function openCssF(openCss, nfile){
-  fs.appendFile(`./app/${nfile}.html`, openCss, err => {
-    if (err){
-      console.log(err)
-      return
-    }
-  })
-}
 
-function endCssF(endCss, nfile){
-  fs.appendFile(`./app/${nfile}.html`, endCss, err => {
-    if (err){
-      console.log(err)
-      return
-    }
-  })  
-}
-
-
-function addCss(nfile, openCSS, endCss){
-  fs.readdir("./style", function (err, files) {
+function addCss(nfile: any, openCSS: any, endCss: any){
+  readdir("./style", function (err, files) {
     files.forEach(function (file){
-      let cfile = path.parse(file).name;
+      let cfile = parse(file).name;
       if (cfile == nfile){
-        fs.readFile(`./style/${file}`, 'utf8', (err, data) => {
+        readFile(`./style/${file}`, 'utf8', (err, data) => {
           if (err) {
             console.error(err);
             return;
           }  
-          fs.appendFile(`./app/${nfile}.html`, openCSS, err => {
+          appendFile(`./app/${nfile}.html`, openCSS, err => {
             if (err) {
               console.log(err)
               return
             }
           })
-          fs.appendFile(`./app/${nfile}.html`, data, err => {
+          appendFile(`./app/${nfile}.html`, data, err => {
             if (err) {
               console.log(err)
               return
             }
           })
-          fs.appendFile(`./app/${nfile}.html`, endCss, err => {
+          appendFile(`./app/${nfile}.html`, endCss, err => {
             if (err) {
               console.log(err)
               return
@@ -142,14 +125,14 @@ function addCss(nfile, openCSS, endCss){
 }
 
 console.log('Buiding...')
-fs.readdir("./posts", function (err, files) {
+readdir("./posts", function (err: any, files: any) {
     //handling error
     if (err) {
         return console.log('Unable to scan directory: ' + err);
     } 
     //listing all files using forEach
-    files.forEach(function (file) {     
-      let nfile = path.parse(file).name;
+    files.forEach(function (file: any) {     
+      let nfile = parse(file).name;
       let startContent = `
 <!DOCTYPE html>
 <html lang="en">
@@ -172,7 +155,7 @@ fs.readdir("./posts", function (err, files) {
 </style>
 `
       createRoutes(nfile)
-      fs.readFile(`./posts/${file}`, 'utf8', (err, data) => {
+      readFile(`./posts/${file}`, 'utf8', (err, data) => {
         if (err) {
           console.error(err);
           return;
@@ -193,7 +176,7 @@ app.listen(port, () => {
 })
 `
 
-fs.appendFile('./express.cjs', finalcontent, err => {
+appendFile('./express.cts', finalcontent, err => {
   if (err) {
     console.error(err)
     return
@@ -203,5 +186,15 @@ fs.appendFile('./express.cjs', finalcontent, err => {
 
 if (args[2] != "--silent"){
   console.log('Done! You can now run the the app by running')
-  console.log('\n npm run dev')
+  detect().then((pm: any) => {
+    if (pm == 'npm') {
+        console.log('\n npm run dev');
+    }
+    else if (pm == 'yarn') {
+        console.log('\n yarn dev');
+    }
+    else if (pm == 'pnpm') {
+        console.log('\n pnpm dev');
+    }
+  });
 }

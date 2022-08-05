@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "node index.js",
-    "dev": "node index.js --silent && node express.cjs"
+    "build": "tsc && node index.js && tsc",
+    "dev": "tsc && node index.js --silent && tsc && node express.cjs"
   },
   "keywords": [],
   "author": "",
