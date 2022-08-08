@@ -1,8 +1,9 @@
 // Imports.
 import { writeFile, readFile, readdir, appendFile, existsSync } from 'fs';
 import { parse } from 'path';
-import { marked } from 'marked';
 import { detect } from 'detect-package-manager';
+import { exec } from 'child_process';
+import { micromark } from 'micromark';
 let args = process.argv;
 // Intial boilerplate
 let content = `
@@ -18,7 +19,7 @@ const app = express()
 const port = ${args[3]}
 `
   // Write the initial boilerplate
-  writeFile('./express.cts', content, err => {
+  writeFile('./express.cts', content, (err: any) => {
     if (err) {
       console.error(err)
       return
@@ -26,7 +27,7 @@ const port = ${args[3]}
   })
 }else{
   // Write the initial boilerplate
-  writeFile('./express.cts', content, err => {
+  writeFile('./express.cts', content, (err: any) => {
     if (err) {
       console.error(err)
       return
@@ -42,7 +43,7 @@ app.get('/', (req: any, res: any) => {
   res.sendFile('./app/${nfile}.html', { root: __dirname })
 })
 ` 
-  appendFile('./express.cts', acontent, err => {
+  appendFile('./express.cts', acontent, (err: any) => {
     if (err) {
       console.error(err)
         return;
@@ -54,7 +55,7 @@ app.get('/${nfile}', (req: any, res: any) => {
   res.sendFile('./app/${nfile}.html', { root: __dirname })
 })
         `
-  appendFile('./express.cts', acontent, err => {
+  appendFile('./express.cts', acontent, (err: any) => {
     if (err) {
       console.error(err)
         return
@@ -63,7 +64,7 @@ app.get('/${nfile}', (req: any, res: any) => {
 }
 
 function writeStartContent(nfile: any, startContent: any){
-  writeFile(`./app/${nfile}.html`, startContent, err => {
+  writeFile(`./app/${nfile}.html`, startContent, (err: any) => {
     if (err) {
       console.error(err)
       return
@@ -72,7 +73,7 @@ function writeStartContent(nfile: any, startContent: any){
 }
 
 function addTranspiledHtml(nfile: any, nhtml: any){
-  appendFile(`./app/${nfile}.html`, nhtml, err => {
+  appendFile(`./app/${nfile}.html`, nhtml, (err: any) => {
     if (err) {
       console.error(err)
       return
@@ -81,7 +82,7 @@ function addTranspiledHtml(nfile: any, nhtml: any){
 }
 
 function addEndContent(nfile: any, endContent: any){
-  appendFile(`./app/${nfile}.html`, endContent, err => {
+  appendFile(`./app/${nfile}.html`, endContent, (err: any) => {
     if (err) {
       console.error(err)
       return
@@ -91,28 +92,61 @@ function addEndContent(nfile: any, endContent: any){
 
 
 function addCss(nfile: any, openCSS: any, endCss: any){
-  readdir("./style", function (err, files) {
-    files.forEach(function (file){
+  readdir("./style", function (err: any, files: any) {
+    files.forEach(function (file: any){
       let cfile = parse(file).name;
       if (cfile == nfile){
-        readFile(`./style/${file}`, 'utf8', (err, data) => {
+        readFile(`./style/${file}`, 'utf8', (err: any, data: any) => {
           if (err) {
             console.error(err);
             return;
           } 
-          appendFile(`./app/${nfile}.html`, openCSS, err => {
+          appendFile(`./app/${nfile}.html`, openCSS, (err: any) => {
             if (err) {
               console.log(err)
               return
             }
           })
-          appendFile(`./app/${nfile}.html`, data, err => {
+          appendFile(`./app/${nfile}.html`, data, (err: any) => {
             if (err) {
               console.log(err)
               return
             }
           })
-          appendFile(`./app/${nfile}.html`, endCss, err => {
+          appendFile(`./app/${nfile}.html`, endCss, (err: any) => {
+            if (err) {
+              console.log(err)
+              return
+            }
+          })
+        })
+      } else if (parse(file).name == nfile && parse(file).ext == "sass"){
+        exec(
+          `sass style/${nfile}.sass style/${nfile}.css`,
+          (error: any) => {
+            if (error){
+              console.error(error);
+            }
+          }
+        )
+        readFile(`./style/${file}`, 'utf8', (err: any, data: any) => {
+          if (err) {
+            console.error(err);
+            return;
+          } 
+          appendFile(`./app/${nfile}.html`, openCSS, (err: any) => {
+            if (err) {
+              console.log(err)
+              return
+            }
+          })
+          appendFile(`./app/${nfile}.html`, data, (err: any) => {
+            if (err) {
+              console.log(err)
+              return
+            }
+          })
+          appendFile(`./app/${nfile}.html`, endCss, (err: any) => {
             if (err) {
               console.log(err)
               return
@@ -121,7 +155,7 @@ function addCss(nfile: any, openCSS: any, endCss: any){
         })
       }
     })
-  })  
+  })
 }
 
 console.log('Buiding...')
@@ -155,12 +189,12 @@ readdir("./posts", function (err: any, files: any) {
 </style>
 `
       createRoutes(nfile)
-      readFile(`./posts/${file}`, 'utf8', (err, data) => {
+      readFile(`./posts/${file}`, 'utf8', (err: any, data: string) => {
         if (err) {
           console.error(err);
           return;
         }
-        const nhtml = marked.parse(data);
+        const nhtml = micromark(data);
         writeStartContent(nfile, startContent)
         addCss(nfile, openCss, endCss)
         addTranspiledHtml(nfile, nhtml)
@@ -176,7 +210,7 @@ app.listen(port, () => {
 })
 `
 
-appendFile('./express.cts', finalcontent, err => {
+appendFile('./express.cts', finalcontent, (err: any) => {
   if (err) {
     console.error(err)
     return
