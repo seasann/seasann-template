@@ -1,5 +1,7 @@
 # Seasann template ts
 
+# READ REAMDE IN CENTRAL REPO
+
 Template for seasann in typescript
 
 ## Building the page
