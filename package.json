@@ -6,14 +6,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc && node index.js && tsc",
-    "dev": "tsc && node index.js --silent && tsc && node express.cjs"
+    "dev": "vite dev"
   },
   "keywords": [],
   "author": "",
   "license": "",
-  "dependencies": {
-    "express": "^4.18.1",
-    "inquirer": "^9.0.2",
-    "marked": "^4.0.18"
+  "devDependencies": {
+    "vite": "^3.2.2"
   }
 }
