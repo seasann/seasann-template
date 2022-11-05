@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc && node index.js && tsc",
+    "build": "seasann compile",
     "dev": "vite dev"
   },
   "keywords": [],
