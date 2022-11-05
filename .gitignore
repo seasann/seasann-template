@@ -1,6 +1,4 @@
 node_modules
-express.cjs
+package-lock.json
 pnpm-lock.yaml
-express.cts
-package.json
 yarn.lock
