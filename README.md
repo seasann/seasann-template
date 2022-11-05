@@ -1,25 +1,21 @@
-# Seasann template ts
+# Generated with seasann
 
-# READ REAMDE IN CENTRAL REPO
+This project was generated with the seasann cli
 
-Template for seasann in typescript
-
-## Building the page
+## Start the dev server
 
 ```bash
-pnpm run build
+npm run dev
 ```
 
-## Running the page
+## Just compile markdown
 
 ```bash
-pnpm run dev
+npm run compile
 ```
 
-## New Pages
+## Build your app
 
-To create new pages, create markdown documents in the `posts/` directory.
-
-## Create Css
-
-To create css, create a .css file with the same name of the markdown file. Css is scoped to that one file.
+```bash
+npm run build
+```

@@ -5,8 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "seasann compile",
-    "dev": "vite dev"
+    "dev": "seasann compile && vite dev --port 3000",
+    "build": "seasann compile && vite build",
+    "compile": "seasann compile"
   },
   "keywords": [],
   "author": "",
